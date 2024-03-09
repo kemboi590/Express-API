@@ -5,9 +5,9 @@ This is a simple Express.js API for managing a todo list. It uses Microsoft SQL 
 ## Getting Started
 
 To get started, clone the repository and install the dependencies.
-git clone https://github.com/kemboi590/Express-API.git
-cd Express-API
-npm install
+- git clone https://github.com/kemboi590/Express-API.git
+- cd Express-API
+- npm install
 
 
 ## API Endpoints
