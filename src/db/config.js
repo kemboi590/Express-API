@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import assert from "assert";
 dotenv.config();
 
-const { PORT, HOST, SQL_SERVER, SQL_USER, SQL_PASSWORD, SQL_DB } =
+const { PORT, HOST, SQL_SERVER, SQL_USER, SQL_PASSWORD, SQL_DB, JWT_SECRET } =
   process.env;
 
 assert(PORT, "PORT is required");
@@ -22,6 +22,7 @@ const config = {
       enableArithAbort: true,
     },
   },
+  jwt_secret: JWT_SECRET,
 };
 
 export default config;
