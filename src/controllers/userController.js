@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 export const registerUser = async (req, res) => {
   const { first_name, last_name, email_address, password } = req.body;
   const hashedPassword = bcrypt.hashSync(password, 10);
-  console.log(hashedPassword);
+  // console.log(hashedPassword);
   try {
     const pool = await sql.connect(config.sql);
     const result = await pool
@@ -46,13 +46,15 @@ export const loginUser = async (req, res) => {
     const user = result.recordset[0];
     // console.log(user);
     if (!user) {
-      return res.status(401).json({ error: "User does net exist" });  // user is not registered
+      return res.status(401).json({ error: "User does net exist" }); // user is not registered
     } else {
-      //user is available 
+      //user is available
       if (!bcrypt.compareSync(password, user.password)) {
         return res.status(401).json({ error: "Incorrect password" });
-      } else { // the password is correct
-        const token = `JWT ${jwt.sign( //unique string given to a user / authentication, keep user logged in
+      } else {
+        // the password is correct
+        const token = `JWT ${jwt.sign(
+          //unique string given to a user / authentication, keep user logged in
           {
             email_address: user.email_address,
             user_id: user.user_id,
@@ -62,7 +64,8 @@ export const loginUser = async (req, res) => {
           config.jwt_secret,
           { expiresIn: "30d" }
         )}`;
-        res.status(200).json({ //user login success
+        res.status(200).json({
+          //user login success
           email_address: user.email_address,
           user_id: user.user_id,
           first_name: user.first_name,
@@ -73,5 +76,15 @@ export const loginUser = async (req, res) => {
     }
   } catch (error) {
     return res.status(500).json({ error: error.message });
+  }
+};
+
+// loginRequred
+export const loginRequired = (req, res, next) => {
+  if (req.user) {
+    //todo
+    next(); //passing control to the next middleware/ actions
+  } else {
+    return res.status(401).json({ message: "Unauthorized user!" });
   }
 };
